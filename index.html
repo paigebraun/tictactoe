@@ -10,14 +10,20 @@
 </head>
 <body>
     <div class="bg">
-        <p class="startText_x">Place an X to start</p>
-        <div class="gameboard">
-            <div id="block_0" class="block">
-                <div class="x">X</div>
+        <p class="pickPlayerText">Pick a player</p>
+        <div class="pickPlayerBox">
+            <div id="pickX">
+                <p>X</p>
             </div>
-            <div id="block_1" class="block">
-                <div class="o">O</div>
+            <div id="pickO">
+                <p>O</p>
             </div>
+        </div>
+        <p class="startText_x" style="display:none">Place an X to start</p>
+        <p class="startText_o" style="display:none">Place an O to start</p>
+        <div class="gameboard" style="display:none">
+            <div id="block_0" class="block"></div>
+            <div id="block_1" class="block"></div>
             <div id="block_2" class="block"></div>
             <div id="block_3" class="block"></div>
             <div id="block_4" class="block"></div>
@@ -26,7 +32,13 @@
             <div id="block_7" class="block"></div>
             <div id="block_8" class="block"></div>
         </div>
-        <button>Restart</button>
+        <button class="restartBtn" style="display:none">Restart</button>
+        <div class="winnerMsg" style="display:none">
+            <p class="x_won" style="display:none">X's Win!</p>
+            <p class="o_won" style="display:none">O's Win!</p>
+            <p class="tie" style="display:none">It's a tie.</p>
+            <button class="playAgainBtn">Play Again</button>
+        </div>
     </div>
 </body>
 </html>
