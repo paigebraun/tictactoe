@@ -47,13 +47,13 @@ function startGame(callback) {
     }
 }
 
-//callback function to save which mark the player picks
+//Callback function to save which mark the player picks
 function assignPlayer(mark) {
     let player1 = mark;
     gameModule(player1);
 }
 
-//simulate gameplay against the computer
+//Simulate gameplay against the computer
 function gameModule(player1) {
     const startText_x = document.querySelector('.startText_x');
     const startText_o = document.querySelector('.startText_o');
@@ -103,11 +103,11 @@ function gameModule(player1) {
         [2, 4, 6]
     ];
   
-    //Gameplay
     let idx = 0;
     let winner = false;
     let currentPlayer = player1;
     
+    //Listen for human (Player1) play
     gameboard.addEventListener('click', gameboardFunc);
     function gameboardFunc(e) {
         startText_x.style.display = 'none';
@@ -124,41 +124,68 @@ function gameModule(player1) {
             idx = e.target.id.slice(-1);
             gameboardArray[idx] = currentPlayer;
 
-            //Check for win & display win message
-            for (i=0; i < winning_combinations.length; i++) {
-                if (((gameboardArray[winning_combinations[i][0]] === gameboardArray[winning_combinations[i][1]]) && (gameboardArray[winning_combinations[i][0]] === gameboardArray[winning_combinations[i][2]])) &&
-                    (gameboardArray[winning_combinations[i][0]] != '')) {
-                    for (j=0; j<winning_combinations[i].length; j++) {
-                        gameboard.children[winning_combinations[i][j]].style.backgroundColor = '#67A766';
-                    }
-                    winner = true;
-                    restartBtn.style.display = 'none';
-                    winnerMsg.style.display = 'flex';
-                    if (gameboardArray[winning_combinations[i][0]] === 'X') {
-                        x_won.style.display = 'block';
-                    } else {
-                        o_won.style.display = 'block';
-                    }
-                } 
-            }
-            
-            //Check if its a tie game
-            if ((gameboardArray.includes('') === false) && (winner === false)){
-                restartBtn.style.display = 'none';
-                winnerMsg.style.display = 'flex';
-                tie.style.display = 'block';
-            }
+            checkForWin();
             switchTurn();
         }
     }
     function switchTurn() {
         if (currentPlayer === player1) {
             currentPlayer = computer;
+            if ((winner == false) && (gameboardArray.includes(''))) {
+                setTimeout(makeComputerPlay, 200);
+            }
         } else {
             currentPlayer = player1;
         }
     }
-    
-}
 
+    //Check for win & display win message
+    function checkForWin() {
+        for (i=0; i < winning_combinations.length; i++) {
+            if (((gameboardArray[winning_combinations[i][0]] === gameboardArray[winning_combinations[i][1]]) && (gameboardArray[winning_combinations[i][0]] === gameboardArray[winning_combinations[i][2]])) &&
+                (gameboardArray[winning_combinations[i][0]] != '')) {
+                for (j=0; j<winning_combinations[i].length; j++) {
+                    gameboard.children[winning_combinations[i][j]].style.backgroundColor = '#67A766';
+                }
+                winner = true;
+                restartBtn.style.display = 'none';
+                winnerMsg.style.display = 'flex';
+                if (gameboardArray[winning_combinations[i][0]] === 'X') {
+                    x_won.style.display = 'block';
+                } else {
+                    o_won.style.display = 'block';
+                }
+            } 
+        }
+        
+        //Check if its a tie game
+        if ((gameboardArray.includes('') === false) && (winner === false)){
+            restartBtn.style.display = 'none';
+            winnerMsg.style.display = 'flex';
+            tie.style.display = 'block';
+        }
+    }
+
+    function makeComputerPlay() {
+        let empty = [];
+        //Computer plays a random empty spot
+        for (i=0; i < gameboardArray.length; i++) {
+            if (gameboardArray[i] === '') {
+                empty.push(i);
+            }
+        }
+        const random = Math.floor(Math.random() * empty.length);
+
+        //Displapy computer pick
+        const play = document.createElement('div');
+        play.className = computer;
+        play.innerText = computer;
+        gameboard.children[empty[random]].appendChild(play);
+
+        //Update gameboard array
+        gameboardArray[empty[random]] = computer;
+        checkForWin();
+        switchTurn();
+    }
+}
 startGame(assignPlayer);
